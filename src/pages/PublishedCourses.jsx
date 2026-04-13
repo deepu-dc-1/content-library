@@ -421,7 +421,7 @@ const PublishedCourses = () => {
               </article>
 
               <article className="rounded-xl border border-slate-200 bg-white px-4 py-3 mb-5 shadow-[0_18px_50px_-30px_rgba(15,23,42,0.35)]">
-                <p style={{lineHeight: 'normal'}} className="mb-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-600">Publishing Details</p>
+                <p style={{lineHeight: 'normal'}} className="mb-3 text-[10px] font-semibold uppercase tracking-[0.14em]  text-slate-600">Publishing Details</p>
                 <div className="grid gap-4 md:grid-cols-2">
                   <DetailField label="Display in Catalogs" value={selectedCourse.displayInCatalogs} />
                   <DetailField label="Display in Reporting" value={selectedCourse.displayInReporting} />
