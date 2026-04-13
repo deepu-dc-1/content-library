@@ -2,6 +2,7 @@ import React from 'react'
 import bgImg from '../assets/bg.jpg'
 import heroImg from '../assets/heroImg.png'
 import msLogo from '../assets/logo.png'
+import { Link } from 'react-router'
 
 const Home = () => {
   return (
@@ -44,7 +45,7 @@ const Home = () => {
 
         <div className="btn-section px-10 mb-10">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="w-full bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-all duration-200 flex items-center cursor-pointer">
+                <Link to='/published-courses' className="w-full bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-all duration-200 flex items-center cursor-pointer">
                 <div className="bg-purple-100 flex items-center justify-center px-3 py-4">
                     <div className="bg-[#CE84D1] rounded-full p-3">
                     <span className='text-2xl'>📚</span>
@@ -60,7 +61,7 @@ const Home = () => {
                     </p>
                     </div>
                 </div>
-                </div>
+                </Link>
 
                 <div className="w-full bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-all duration-200 flex items-center cursor-pointer">
                 <div className="bg-purple-100 flex items-center justify-center px-3 py-4">
