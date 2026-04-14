@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import supportImg from '../assets/supportImg.png'
+import { toast } from 'react-toastify'
 
 const courses = [
   {
@@ -97,7 +99,7 @@ const filterConfig = [
 ]
 
 const iconButtonClass =
-  'flex h-9 w-9 items-center justify-center rounded-lg border border-violet-200 bg-white text-violet-700 shadow-sm transition hover:border-violet-300 hover:bg-violet-50'
+  'flex h-8 w-8 items-center justify-center rounded-lg bg-white text-violet-700 transition hover:border-violet-300 hover:text-white hover:bg-violet-500'
 
 const headerIconButtonClass =
   'flex h-8 w-8 items-center justify-center rounded-full border border-white/55 bg-white/15 text-white backdrop-blur-sm'
@@ -210,6 +212,34 @@ const PublishedCourses = () => {
       }
     })
   }
+
+  const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
+  const [scormFile, setScormFile] = useState(null);
+  const [pdfFile, setPdfFile] = useState(null);
+  const [uploadMessage, setUploadMessage] = useState('');
+  const [showMessage, setShowMessage] = useState(false);
+
+  const handleFileSelect = (event, fileType) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      if (fileType === 'scorm') {
+        setScormFile(file);
+      } else if (fileType === 'pdf') {
+        setPdfFile(file);
+      }
+    }
+  };
+
+  const handleSubmitUpload = () => {
+    if (scormFile || pdfFile) {
+      toast.success('Files uploaded successfully!');
+      setShowMessage(true);
+      setIsSupportModalOpen(false);
+      setScormFile(null);
+      setPdfFile(null);
+      setTimeout(() => setShowMessage(false), 3000);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[linear-gradient(180deg,#f6f4ff_0%,#f8fafc_24%,#eef4ff_100%)] px-3 py-4 text-left text-[12px] md:px-5 lg:px-6">
@@ -330,6 +360,15 @@ const PublishedCourses = () => {
                 </div>
                 
                 <div className="flex items-center gap-2 self-start">
+                  <button onClick={() => setIsSupportModalOpen(true)} type="button" className='cursor-pointer flex h-8 w-24 items-center justify-center font-semibold rounded-md border border-violet-600 bg-violet-600 text-white shadow-sm transition hover:border-violet-700 hover:bg-violet-700'>
+                    Upload files
+                  </button>
+                </div>
+              </div>
+
+              <article className="rounded-xl border border-slate-200 bg-white px-4 py-3 mb-5 shadow-[0_18px_50px_-30px_rgba(15,23,42,0.35)]">
+                <div className='flex items-center justify-between gap-2'>
+                  <p style={{lineHeight: 'normal'}} className="mb-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-600">Course Overview</p>
                   <button type="button" className={`cursor-pointer ${iconButtonClass}`}>
                     <svg className="h-4 w-4" viewBox="0 0 20 20" fill="none">
                       <path d="M4.75 15.25h2.1l7.7-7.7-2.1-2.1-7.7 7.7v2.1Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
@@ -337,10 +376,6 @@ const PublishedCourses = () => {
                     </svg>
                   </button>
                 </div>
-              </div>
-
-              <article className="rounded-xl border border-slate-200 bg-white px-4 py-3 mb-5 shadow-[0_18px_50px_-30px_rgba(15,23,42,0.35)]">
-                <p style={{lineHeight: 'normal'}} className="mb-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-600">Course Overview</p>
                 <div className="">
                   <div>
                     <p style={{lineHeight: 'normal'}} className="text-[10px] mb-1 font-semibold  tracking-[0.14em] text-slate-800">Description</p>
@@ -366,7 +401,16 @@ const PublishedCourses = () => {
               </article>
 
               <article className="rounded-xl border border-slate-200 bg-white px-4 py-3 mb-5 shadow-[0_18px_50px_-30px_rgba(15,23,42,0.35)]">
-                <p style={{lineHeight: 'normal'}} className="mb-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-600">Catalog Metadata</p>
+                <div className='flex items-center justify-between gap-2'>
+                  <p style={{lineHeight: 'normal'}} className="mb-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-600">Catalog Metadata</p>
+                  <button type="button" className={`cursor-pointer ${iconButtonClass}`}>
+                    <svg className="h-4 w-4" viewBox="0 0 20 20" fill="none">
+                      <path d="M4.75 15.25h2.1l7.7-7.7-2.1-2.1-7.7 7.7v2.1Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+                      <path d="m11.6 5.4 2.1 2.1" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+                    </svg>
+                  </button>
+                </div>
+                
                 <div className="grid gap-4 md:grid-cols-4">
                   <DetailField label="Program Name" value={selectedCourse.programName} />
                   <DetailField label="Catalog" value={selectedCourse.catalogue} />
@@ -378,7 +422,16 @@ const PublishedCourses = () => {
 
               <article>
                 <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 mb-5 shadow-[0_18px_50px_-30px_rgba(15,23,42,0.35)]">
+                  <div className='flex items-center justify-between gap-2'>
                   <p style={{lineHeight: 'normal'}} className="mb-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-600">Audience And Classification</p>
+                  <button type="button" className={`cursor-pointer ${iconButtonClass}`}>
+                    <svg className="h-4 w-4" viewBox="0 0 20 20" fill="none">
+                      <path d="M4.75 15.25h2.1l7.7-7.7-2.1-2.1-7.7 7.7v2.1Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+                      <path d="m11.6 5.4 2.1 2.1" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+                    </svg>
+                  </button>
+                </div>
+                  
                   <div className="grid gap-4 md:grid-cols-4">
                     <div className='col-span-2'>
                       <p style={{lineHeight: 'normal'}} className="text-[10px] mb-1 font-semibold  tracking-[0.14em] text-slate-700">Segment</p>
@@ -421,7 +474,16 @@ const PublishedCourses = () => {
               </article>
 
               <article className="rounded-xl border border-slate-200 bg-white px-4 py-3 mb-5 shadow-[0_18px_50px_-30px_rgba(15,23,42,0.35)]">
-                <p style={{lineHeight: 'normal'}} className="mb-3 text-[10px] font-semibold uppercase tracking-[0.14em]  text-slate-600">Publishing Details</p>
+                <div className='flex items-center justify-between gap-2'>
+                  <p style={{lineHeight: 'normal'}} className="mb-3 text-[10px] font-semibold uppercase tracking-[0.14em]  text-slate-600">Publishing Details</p>
+                  <button type="button" className={`cursor-pointer ${iconButtonClass}`}>
+                    <svg className="h-4 w-4" viewBox="0 0 20 20" fill="none">
+                      <path d="M4.75 15.25h2.1l7.7-7.7-2.1-2.1-7.7 7.7v2.1Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+                      <path d="m11.6 5.4 2.1 2.1" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+                    </svg>
+                  </button>
+                </div>
+                
                 <div className="grid gap-4 md:grid-cols-2">
                   <DetailField label="Display in Catalogs" value={selectedCourse.displayInCatalogs} />
                   <DetailField label="Display in Reporting" value={selectedCourse.displayInReporting} />
@@ -442,6 +504,91 @@ const PublishedCourses = () => {
           </section>
         </section>
       </div>
+      
+
+      {isSupportModalOpen && (
+      <div className='fixed inset-0 z-50 flex items-center justify-center'>
+          <div className='absolute inset-0 bg-black/40' onClick={() => setIsSupportModalOpen(false)}></div>
+          <div className='relative w-[95%] max-w-4xl bg-white rounded-lg shadow-lg overflow-hidden'>
+              <div className='flex items-center justify-between px-6 py-4 border-b border-gray-200'>
+                  <div>
+                      <h3 className='text-lg font-semibold text-gray-900'>Upload files</h3>
+                      <p className='text-[12px] text-gray-600'>
+                        Upload the required SCORM (.zip) and PDF file associated with this work item. Both files must be provided to complete the documentation process.
+                      </p>
+                  </div>
+                  <button onClick={() => setIsSupportModalOpen(false)} className='btn btn-sm btn-ghost'>
+                      ✕
+                  </button>
+              </div>
+
+              <div className=''>
+                <div className='p-6'>
+                  <div className='max-h-[60vh] overflow-y-auto'>
+                    <div className='grid grid-cols-2 gap-6'>
+                      {/* File Upload 1 */}
+                      <div>
+                        <h5 className='text-base text-center font-semibold text-gray-700 mb-1'>Upload SCORM/Zip file</h5>
+                        <div className='rounded-lg p-4 bg-white'>
+                          <label className='flex items-center justify-center h-24 border-2 border-dashed border-gray-300 rounded cursor-pointer hover:bg-gray-50 transition'>
+                            <input
+                              type='file'
+                              onChange={(e) => handleFileSelect(e, 'scorm')}
+                              className='hidden'
+                            />
+                            <div className='text-center'>
+                              <svg className='w-8 h-8 text-violet-700 mx-auto mb-2' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2'>
+                                <path d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4' />
+                                <polyline points='17 8 12 3 7 8' />
+                                <line x1='12' y1='3' x2='12' y2='15' />
+                              </svg>
+                              <span className='text-slate-600 text-sm'>Upload file</span>
+                            </div>
+                          </label>
+                          <p className='text-center text-slate-600 text-sm mt-3'>
+                            {scormFile ? scormFile.name : 'No file selected'}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* File Upload 2 */}
+                      <div>
+                        <h5 className='text-base text-center font-semibold text-gray-700 mb-1'>Upload PDF file</h5>
+                        <div className='rounded-lg p-4 bg-white'>
+                          <label className='flex items-center justify-center h-24 border-2 border-dashed border-gray-300 rounded cursor-pointer hover:bg-gray-50 transition'>
+                            <input
+                              type='file'
+                              onChange={(e) => handleFileSelect(e, 'pdf')}
+                              className='hidden'
+                            />
+                            <div className='text-center'>
+                              <svg className='w-8 h-8 text-violet-700 mx-auto mb-2' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2'>
+                                <path d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4' />
+                                <polyline points='17 8 12 3 7 8' />
+                                <line x1='12' y1='3' x2='12' y2='15' />
+                              </svg>
+                              <span className='text-slate-600 text-sm'>Upload file</span>
+                            </div>
+                          </label>
+                          <p className='text-center text-slate-600 text-sm mt-3'>
+                            {pdfFile ? pdfFile.name : 'No file selected'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className='flex gap-3 px-6 py-4 mt-6 border-t border-gray-200'>
+                  <button type='button' onClick={handleSubmitUpload} className='flex h-9 items-center justify-center rounded-lg bg-violet-600 px-6 text-white font-semibold transition hover:bg-violet-700 shadow-sm'>Submit Request</button>
+                  <button type='button' onClick={() => setIsSupportModalOpen(false)} className='flex h-9 items-center justify-center rounded-lg border border-slate-300 bg-white px-6 text-slate-700 font-semibold transition hover:bg-slate-50'>Cancel</button>
+                </div>
+              </div>
+              
+          </div>
+      </div>
+    )}
+
     </div>
   )
 }
