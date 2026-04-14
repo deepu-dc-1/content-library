@@ -150,8 +150,8 @@ function MultiSelectDropdown({ label, options, selectedValues, onToggle, isOpen,
 function DetailField({ label, value }) {
   return (
     <div>
-      <p style={{lineHeight: 'normal'}} className="text-[10px] font-semibold  tracking-[0.14em] text-slate-700">{label}</p>
-      <p className="text-[12px] leading-5 text-slate-700">{value || 'Not available'}</p>
+      <p style={{lineHeight: 'normal'}} className="text-[10px] mb-1 font-semibold  tracking-[0.14em] text-slate-700">{label}</p>
+      <p style={{lineHeight: 'normal'}} className="text-[12px] leading-5 text-slate-700">{value || 'Not available'}</p>
     </div>
   )
 }
@@ -343,12 +343,12 @@ const PublishedCourses = () => {
                 <p style={{lineHeight: 'normal'}} className="mb-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-600">Course Overview</p>
                 <div className="">
                   <div>
-                    <p style={{lineHeight: 'normal'}} className="text-[10px] font-semibold  tracking-[0.14em] text-slate-800">Description</p>
-                    <p className="text-[12px] leading-6 text-slate-700">{valueOrFallback(selectedCourse.description)}</p>
+                    <p style={{lineHeight: 'normal'}} className="text-[10px] mb-1 font-semibold  tracking-[0.14em] text-slate-800">Description</p>
+                    <p style={{lineHeight: 'normal'}} className="text-[12px] leading-6 text-slate-700">{valueOrFallback(selectedCourse.description)}</p>
                   </div>
                   <div className='mt-3'>
-                    <p style={{lineHeight: 'normal'}} className="text-[10px] font-semibold  tracking-[0.14em] text-slate-700">Abstract</p>
-                    <p className="text-[12px] leading-6 text-slate-700">{valueOrFallback(selectedCourse.abstract)}</p>
+                    <p style={{lineHeight: 'normal'}} className="text-[10px] mb-1 font-semibold  tracking-[0.14em] text-slate-700">Abstract</p>
+                    <p style={{lineHeight: 'normal'}} className="text-[12px] leading-6 text-slate-700">{valueOrFallback(selectedCourse.abstract)}</p>
                   </div>
                 </div>
 
@@ -360,8 +360,8 @@ const PublishedCourses = () => {
                 </div>
 
                 <div className="mt-3">
-                  <p style={{lineHeight: 'normal'}} className="text-[10px] font-semibold  tracking-[0.14em] text-slate-700">Live Asset Link</p>
-                  <p className="break-all text-[12px] leading-6 text-slate-700">{valueOrFallback(selectedCourse.liveAssetLink)}</p>
+                  <p style={{lineHeight: 'normal'}} className="text-[10px] mb-1 font-semibold  tracking-[0.14em] text-slate-700">Live Asset Link</p>
+                  <p style={{lineHeight: 'normal'}} className="break-all text-[12px] leading-6 text-slate-700">{valueOrFallback(selectedCourse.liveAssetLink)}</p>
                 </div>
               </article>
 
@@ -381,40 +381,40 @@ const PublishedCourses = () => {
                   <p style={{lineHeight: 'normal'}} className="mb-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-600">Audience And Classification</p>
                   <div className="grid gap-4 md:grid-cols-4">
                     <div className='col-span-2'>
-                      <p style={{lineHeight: 'normal'}} className="text-[10px] font-semibold  tracking-[0.14em] text-slate-700">Segment</p>
-                      <p className="text-[12px] leading-6 text-slate-700">{listOrFallback(selectedCourse.segment)}</p>
+                      <p style={{lineHeight: 'normal'}} className="text-[10px] mb-1 font-semibold  tracking-[0.14em] text-slate-700">Segment</p>
+                      <p style={{lineHeight: 'normal'}} className="text-[12px] leading-6 text-slate-700">{listOrFallback(selectedCourse.segment)}</p>
                     </div>
                     <div className='col-span-2'>
-                      <p style={{lineHeight: 'normal'}} className="text-[10px] font-semibold  tracking-[0.14em] text-slate-700">MCEM Stage</p>
-                      <p className="text-[12px] leading-6 text-slate-700">{listOrFallback(selectedCourse.mcemStage)}</p>
+                      <p style={{lineHeight: 'normal'}} className="text-[10px] mb-1 font-semibold  tracking-[0.14em] text-slate-700">MCEM Stage</p>
+                      <p style={{lineHeight: 'normal'}} className="text-[12px] leading-6 text-slate-700">{listOrFallback(selectedCourse.mcemStage)}</p>
                     </div>
                   </div>
                   <div className="mt-3 grid gap-4 md:grid-cols-4">
                     <div>
-                      <p style={{lineHeight: 'normal'}} className="text-[10px] font-semibold  tracking-[0.14em] text-slate-700">Solution Area</p>
-                      <p className="text-[12px] leading-6 text-slate-700">{listOrFallback(selectedCourse.solutionArea)}</p>
+                      <p style={{lineHeight: 'normal'}} className="text-[10px] mb-1 font-semibold  tracking-[0.14em] text-slate-700">Solution Area</p>
+                      <p style={{lineHeight: 'normal'}} className="text-[12px] leading-6 text-slate-700">{listOrFallback(selectedCourse.solutionArea)}</p>
                     </div>
                     
                     <div>
-                      <p style={{lineHeight: 'normal'}} className="text-[10px] font-semibold  tracking-[0.14em] text-slate-700">Industry</p>
-                      <p className="text-[12px] leading-6 text-slate-700">{listOrFallback(selectedCourse.industry)}</p>
+                      <p style={{lineHeight: 'normal'}} className="text-[10px] mb-1 font-semibold  tracking-[0.14em] text-slate-700">Industry</p>
+                      <p style={{lineHeight: 'normal'}} className="text-[12px] leading-6 text-slate-700">{listOrFallback(selectedCourse.industry)}</p>
                     </div>
 
                     <div>
-                      <p style={{lineHeight: 'normal'}} className="text-[10px] font-semibold  tracking-[0.14em] text-slate-700">Profession</p>
-                      <p className="text-[12px] leading-6 text-slate-700">{listOrFallback(selectedCourse.profession)}</p>
+                      <p style={{lineHeight: 'normal'}} className="text-[10px] mb-1 font-semibold  tracking-[0.14em] text-slate-700">Profession</p>
+                      <p style={{lineHeight: 'normal'}} className="text-[12px] leading-6 text-slate-700">{listOrFallback(selectedCourse.profession)}</p>
                     </div>
 
                     <div>
-                      <p style={{lineHeight: 'normal'}} className="text-[10px] font-semibold  tracking-[0.14em] text-slate-700">Discipline</p>
-                      <p className="text-[12px] leading-6 text-slate-700">{listOrFallback(selectedCourse.discipline)}</p>
+                      <p style={{lineHeight: 'normal'}} className="text-[10px] mb-1 font-semibold  tracking-[0.14em] text-slate-700">Discipline</p>
+                      <p style={{lineHeight: 'normal'}} className="text-[12px] leading-6 text-slate-700">{listOrFallback(selectedCourse.discipline)}</p>
                     </div>
                   </div>
 
                   <div className="mt-3">
                     <div className="mt-3">
-                      <p style={{lineHeight: 'normal'}} className="text-[10px] font-semibold  tracking-[0.14em] text-slate-700">Skills</p>
-                      <p className="text-[12px] leading-6 text-slate-700">{listOrFallback(selectedCourse.skills)}</p>
+                      <p style={{lineHeight: 'normal'}} className="text-[10px] mb-1 font-semibold  tracking-[0.14em] text-slate-700">Skills</p>
+                      <p style={{lineHeight: 'normal'}} className="text-[12px] leading-6 text-slate-700">{listOrFallback(selectedCourse.skills)}</p>
                     </div>
                   </div>
                 </div>
@@ -428,8 +428,8 @@ const PublishedCourses = () => {
                 </div>
 
                 <div className="mt-3">
-                  <p style={{lineHeight: 'normal'}} className="text-[10px] font-semibold  tracking-[0.14em] text-slate-700">Comments</p>
-                  <p className="text-[12px] leading-6 text-slate-700">{valueOrFallback(selectedCourse.comments)}</p>
+                  <p style={{lineHeight: 'normal'}} className="text-[10px] mb-1 font-semibold  tracking-[0.14em] text-slate-700">Comments</p>
+                  <p style={{lineHeight: 'normal'}} className="text-[12px] leading-6 text-slate-700">{valueOrFallback(selectedCourse.comments)}</p>
                 </div>
               </article>
               </>
