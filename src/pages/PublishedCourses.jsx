@@ -282,7 +282,7 @@ const PublishedCourses = () => {
             </div> */}
 
             <div className="rounded-xl border border-violet-100 bg-violet-50/60 p-2">
-              <div className="mt-1">
+              <div className="">
                 {filterConfig.map((filter) => (
                   <MultiSelectDropdown
                     key={filter.key}
