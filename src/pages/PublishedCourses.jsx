@@ -579,9 +579,9 @@ const PublishedCourses = () => {
                   </div>
                 </div>
 
-                <div className='flex gap-3 px-6 py-4 mt-6 border-t border-gray-200'>
-                  <button type='button' onClick={handleSubmitUpload} className='flex h-9 items-center justify-center rounded-lg bg-violet-600 px-6 text-white font-semibold transition hover:bg-violet-700 shadow-sm'>Submit Request</button>
+                <div className='flex gap-3 justify-end px-6 py-4 mt-6 border-t border-gray-200'>
                   <button type='button' onClick={() => setIsSupportModalOpen(false)} className='flex h-9 items-center justify-center rounded-lg border border-slate-300 bg-white px-6 text-slate-700 font-semibold transition hover:bg-slate-50'>Cancel</button>
+                  <button type='button' onClick={handleSubmitUpload} className='flex h-9 items-center justify-center rounded-lg bg-violet-600 px-6 text-white font-semibold transition hover:bg-violet-700 shadow-sm'>Submit Request</button>
                 </div>
               </div>
               
