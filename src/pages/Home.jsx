@@ -63,23 +63,23 @@ const Home = () => {
                 </div>
                 </Link>
 
-                <div className="w-full bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-all duration-200 flex items-center cursor-pointer">
-                <div className="bg-purple-100 flex items-center justify-center px-3 py-4">
-                    <div className="bg-[#CE84D1] rounded-full p-3">
-                    <span className='text-2xl'>📝</span>
+                <Link to='/courses' className="w-full bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-all duration-200 flex items-center cursor-pointer">
+                    <div className="bg-purple-100 flex items-center justify-center px-3 py-4">
+                        <div className="bg-[#CE84D1] rounded-full p-3">
+                        <span className='text-2xl'>📝</span>
+                        </div>
                     </div>
-                </div>
-                <div className="flex justify-between items-center w-full px-3 py-2">
-                    <div className='text-left'>
-                    <h4 className="text-sm font-semibold text-gray-800 mb-1">
-                        Create new request
-                    </h4>
-                    <p className="text-gray-600 text-xs">
-                        Lorem Ipsum is simply dummy text of printing industry.
-                    </p>
+                    <div className="flex justify-between items-center w-full px-3 py-2">
+                        <div className='text-left'>
+                        <h4 className="text-sm font-semibold text-gray-800 mb-1">
+                            Create new request
+                        </h4>
+                        <p className="text-gray-600 text-xs">
+                            Lorem Ipsum is simply dummy text of printing industry.
+                        </p>
+                        </div>
                     </div>
-                </div>
-                </div>
+                </Link>
             </div>
         </div>
 

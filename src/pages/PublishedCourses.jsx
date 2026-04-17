@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import supportImg from '../assets/supportImg.png'
 import { toast } from 'react-toastify'
+import Header from '../components/Header'
 
 const courses = [
   {
@@ -100,8 +101,6 @@ const filterConfig = [
 
 const iconButtonClass =
   'flex h-8 w-8 items-center justify-center rounded-lg bg-white text-violet-700 transition hover:border-violet-300 hover:text-white hover:bg-violet-500'
-
-const headerIconButtonClass = 'flex h-8 w-8 items-center justify-center rounded-full border border-white/55 bg-white/15 text-white backdrop-blur-sm'
 
 function MultiSelectDropdown({ label, options, selectedValues, onToggle, isOpen, onOpenChange }) {
   const selectedCount = selectedValues.length
@@ -243,29 +242,7 @@ const PublishedCourses = () => {
   return (
     <div className="min-h-screen bg-[linear-gradient(180deg,#f6f4ff_0%,#f8fafc_24%,#eef4ff_100%)] px-3 py-4 text-left text-[12px] md:px-5 lg:px-6">
       <div className="mx-auto flex max-w-6xl flex-col gap-0">
-        <header
-          className="flex items-center justify-between rounded-t-[4px] border border-fuchsia-500/60 border-b-0 px-3 py-2 shadow-sm"
-          style={{
-            backgroundImage: 'linear-gradient(90deg, #bf3ccc 0%, #c23dbb 34%, #cb408f 68%, #de4d83 100%)',
-          }}
-        >
-          <div className="flex items-center gap-3">
-            <button type="button" className={headerIconButtonClass}>
-              <svg className="h-4 w-4" viewBox="0 0 20 20" fill="none">
-                <path d="M3.25 8.25 10 3l6.75 5.25V16a.75.75 0 0 1-.75.75h-4.25v-5h-3.5v5H4A.75.75 0 0 1 3.25 16V8.25Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
-              </svg>
-            </button>
-            <h1 className="text-[15px] font-semibold text-white">Content Library Management</h1>
-          </div>
-
-          <button type="button" className={headerIconButtonClass}>
-            <svg className="h-4 w-4" viewBox="0 0 20 20" fill="none">
-              <circle cx="10" cy="10" r="7" stroke="currentColor" strokeWidth="1.6" />
-              <path d="M10 13.75v-.25c0-1.45 1.75-1.7 1.75-3.4 0-1.03-.8-1.85-2-1.85-1.02 0-1.72.45-2.2 1.2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-              <circle cx="10" cy="15.7" r=".8" fill="currentColor" />
-            </svg>
-          </button>
-        </header>
+        <Header />
 
         <section className="-mt-px grid gap-4 xl:grid-cols-[320px_minmax(0,1fr)]">
           <aside className="rounded-b-3xl mt-px rounded-t-none border border-slate-200 bg-white p-3.5 shadow-[0_18px_50px_-30px_rgba(15,23,42,0.35)] md:p-4">
