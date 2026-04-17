@@ -101,8 +101,7 @@ const filterConfig = [
 const iconButtonClass =
   'flex h-8 w-8 items-center justify-center rounded-lg bg-white text-violet-700 transition hover:border-violet-300 hover:text-white hover:bg-violet-500'
 
-const headerIconButtonClass =
-  'flex h-8 w-8 items-center justify-center rounded-full border border-white/55 bg-white/15 text-white backdrop-blur-sm'
+const headerIconButtonClass = 'flex h-8 w-8 items-center justify-center rounded-full border border-white/55 bg-white/15 text-white backdrop-blur-sm'
 
 function MultiSelectDropdown({ label, options, selectedValues, onToggle, isOpen, onOpenChange }) {
   const selectedCount = selectedValues.length
