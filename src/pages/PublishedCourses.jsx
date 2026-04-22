@@ -2,6 +2,9 @@ import React, { useState } from 'react'
 import supportImg from '../assets/supportImg.png'
 import { toast } from 'react-toastify'
 import Header from '../components/Header'
+import TextInput from '../components/TextInput'
+import TextAreaInput from '../components/TextAreaInput'
+import SelectInput from '../components/SelectInput'
 
 const courses = [
   {
@@ -216,6 +219,15 @@ const PublishedCourses = () => {
   const [pdfFile, setPdfFile] = useState(null);
   const [uploadMessage, setUploadMessage] = useState('');
   const [showMessage, setShowMessage] = useState(false);
+  
+  // State for edit modes and edit data
+  const [editingSection, setEditingSection] = useState(null);
+  const [editData, setEditData] = useState({
+    courseOverview: {},
+    catalogMetadata: {},
+    audienceClassification: {},
+    publishingDetails: {},
+  });
 
   const handleFileSelect = (event, fileType) => {
     const file = event.target.files?.[0];
@@ -237,6 +249,39 @@ const PublishedCourses = () => {
       setPdfFile(null);
       setTimeout(() => setShowMessage(false), 3000);
     }
+  };
+
+  const startEdit = (section, data) => {
+    setEditingSection(section);
+    setEditData((prev) => ({
+      ...prev,
+      [section]: { ...data },
+    }));
+  };
+
+  const cancelEdit = () => {
+    setEditingSection(null);
+    setEditData({
+      courseOverview: {},
+      catalogMetadata: {},
+      audienceClassification: {},
+      publishingDetails: {},
+    });
+  };
+
+  const saveEdit = () => {
+    toast.success('Changes saved successfully!');
+    setEditingSection(null);
+  };
+
+  const handleEditChange = (field, value) => {
+    setEditData((prev) => ({
+      ...prev,
+      [editingSection]: {
+        ...prev[editingSection],
+        [field]: value,
+      },
+    }));
   };
 
   return (
@@ -345,41 +390,7 @@ const PublishedCourses = () => {
               <article className="rounded-xl border border-slate-200 bg-white px-4 py-3 mb-5 shadow-[0_18px_50px_-30px_rgba(15,23,42,0.35)]">
                 <div className='flex items-center justify-between gap-2'>
                   <p style={{lineHeight: 'normal'}} className="mb-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-600">Course Overview</p>
-                  <button type="button" className={`cursor-pointer ${iconButtonClass}`}>
-                    <svg className="h-4 w-4" viewBox="0 0 20 20" fill="none">
-                      <path d="M4.75 15.25h2.1l7.7-7.7-2.1-2.1-7.7 7.7v2.1Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
-                      <path d="m11.6 5.4 2.1 2.1" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-                    </svg>
-                  </button>
-                </div>
-                <div className="">
-                  <div>
-                    <p style={{lineHeight: 'normal'}} className="text-[10px] mb-1 font-semibold  tracking-[0.14em] text-slate-800">Description</p>
-                    <p style={{lineHeight: 'normal'}} className="text-[12px] leading-6 text-slate-700">{valueOrFallback(selectedCourse.description)}</p>
-                  </div>
-                  <div className='mt-3'>
-                    <p style={{lineHeight: 'normal'}} className="text-[10px] mb-1 font-semibold  tracking-[0.14em] text-slate-700">Abstract</p>
-                    <p style={{lineHeight: 'normal'}} className="text-[12px] leading-6 text-slate-700">{valueOrFallback(selectedCourse.abstract)}</p>
-                  </div>
-                </div>
-
-                <div className="mt-3 grid gap-4 md:grid-cols-4">
-                  <DetailField label="Asset Type" value={selectedCourse.assetType} />
-                  <DetailField label="Training Type" value={selectedCourse.trainingType} />
-                  <DetailField label="Duration" value={selectedCourse.duration} />
-                  <DetailField label="Proficiency Level" value={selectedCourse.proficiency} />
-                </div>
-
-                <div className="mt-3">
-                  <p style={{lineHeight: 'normal'}} className="text-[10px] mb-1 font-semibold  tracking-[0.14em] text-slate-700">Live Asset Link</p>
-                  <p style={{lineHeight: 'normal'}} className="break-all text-[12px] leading-6 text-slate-700">{valueOrFallback(selectedCourse.liveAssetLink)}</p>
-                </div>
-              </article>
-
-              <article className="rounded-xl border border-slate-200 bg-white px-4 py-3 mb-5 shadow-[0_18px_50px_-30px_rgba(15,23,42,0.35)]">
-                <div className='flex items-center justify-between gap-2'>
-                  <p style={{lineHeight: 'normal'}} className="mb-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-600">Catalog Metadata</p>
-                  <button type="button" className={`cursor-pointer ${iconButtonClass}`}>
+                  <button type="button" onClick={() => editingSection === 'courseOverview' ? cancelEdit() : startEdit('courseOverview', { description: selectedCourse.description, abstract: selectedCourse.abstract, assetType: selectedCourse.assetType, trainingType: selectedCourse.trainingType, duration: selectedCourse.duration, proficiency: selectedCourse.proficiency, liveAssetLink: selectedCourse.liveAssetLink })} className={`cursor-pointer ${iconButtonClass}`}>
                     <svg className="h-4 w-4" viewBox="0 0 20 20" fill="none">
                       <path d="M4.75 15.25h2.1l7.7-7.7-2.1-2.1-7.7 7.7v2.1Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
                       <path d="m11.6 5.4 2.1 2.1" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
@@ -387,12 +398,145 @@ const PublishedCourses = () => {
                   </button>
                 </div>
                 
-                <div className="grid gap-4 md:grid-cols-4">
-                  <DetailField label="Program Name" value={selectedCourse.programName} />
-                  <DetailField label="Catalog" value={selectedCourse.catalogue} />
-                  <DetailField label="Sub-Catalog" value={selectedCourse.subCatalog} />
-                  <DetailField label="Fiscal Year" value={selectedCourse.fiscalYear} />
+                {editingSection === 'courseOverview' ? (
+                  <div className="">
+                    <div className='grid gap-4 md:grid-cols-2 mb-3'>
+                      <TextAreaInput
+                        label="Description"
+                        value={editData.courseOverview.description || ''}
+                        onChange={(e) => handleEditChange('description', e.target.value)}
+                        placeholder="Enter description"
+                        rows={2}
+                      />
+                      <TextAreaInput
+                        label="Abstract"
+                        value={editData.courseOverview.abstract || ''}
+                        onChange={(e) => handleEditChange('abstract', e.target.value)}
+                        placeholder="Enter abstract"
+                        rows={2}
+                      />
+                    </div>
+
+                    <div className="grid gap-4 md:grid-cols-4">
+                      <TextInput
+                        label="Asset Type"
+                        value={editData.courseOverview.assetType || ''}
+                        onChange={(e) => handleEditChange('assetType', e.target.value)}
+                        placeholder="Enter asset type"
+                      />
+                      <TextInput
+                        label="Training Type"
+                        value={editData.courseOverview.trainingType || ''}
+                        onChange={(e) => handleEditChange('trainingType', e.target.value)}
+                        placeholder="Enter training type"
+                      />
+                      <TextInput
+                        label="Duration"
+                        value={editData.courseOverview.duration || ''}
+                        onChange={(e) => handleEditChange('duration', e.target.value)}
+                        placeholder="Enter duration"
+                      />
+                      <TextInput
+                        label="Proficiency Level"
+                        value={editData.courseOverview.proficiency || ''}
+                        onChange={(e) => handleEditChange('proficiency', e.target.value)}
+                        placeholder="Enter proficiency level"
+                      />
+                    </div>
+
+                    <div className="mt-3">
+                      <TextInput
+                        label="Live Asset Link"
+                        value={editData.courseOverview.liveAssetLink || ''}
+                        onChange={(e) => handleEditChange('liveAssetLink', e.target.value)}
+                        placeholder="Enter live asset link"
+                      />
+                    </div>
+
+                    <div className="flex gap-3 justify-end mt-4">
+                      <button type="button" onClick={cancelEdit} className="flex h-9 cursor-pointer items-center justify-center rounded-lg border border-slate-300 bg-white px-6 text-slate-700 font-semibold transition hover:bg-slate-50">Cancel</button>
+                      <button type="button" onClick={saveEdit} className="flex h-9 cursor-pointer items-center justify-center rounded-lg bg-violet-600 px-6 text-white font-semibold transition hover:bg-violet-700 shadow-sm">Save</button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="">
+                    <div>
+                      <p style={{lineHeight: 'normal'}} className="text-[10px] mb-1 font-semibold  tracking-[0.14em] text-slate-800">Description</p>
+                      <p style={{lineHeight: 'normal'}} className="text-[12px] leading-6 text-slate-700">{valueOrFallback(selectedCourse.description)}</p>
+                    </div>
+                    <div className='mt-3'>
+                      <p style={{lineHeight: 'normal'}} className="text-[10px] mb-1 font-semibold  tracking-[0.14em] text-slate-700">Abstract</p>
+                      <p style={{lineHeight: 'normal'}} className="text-[12px] leading-6 text-slate-700">{valueOrFallback(selectedCourse.abstract)}</p>
+                    </div>
+
+                    <div className="mt-3 grid gap-4 md:grid-cols-4">
+                      <DetailField label="Asset Type" value={selectedCourse.assetType} />
+                      <DetailField label="Training Type" value={selectedCourse.trainingType} />
+                      <DetailField label="Duration" value={selectedCourse.duration} />
+                      <DetailField label="Proficiency Level" value={selectedCourse.proficiency} />
+                    </div>
+
+                    <div className="mt-3">
+                      <p style={{lineHeight: 'normal'}} className="text-[10px] mb-1 font-semibold  tracking-[0.14em] text-slate-700">Live Asset Link</p>
+                      <p style={{lineHeight: 'normal'}} className="break-all text-[12px] leading-6 text-slate-700">{valueOrFallback(selectedCourse.liveAssetLink)}</p>
+                    </div>
+                  </div>
+                )}
+              </article>
+
+              <article className="rounded-xl border border-slate-200 bg-white px-4 py-3 mb-5 shadow-[0_18px_50px_-30px_rgba(15,23,42,0.35)]">
+                <div className='flex items-center justify-between gap-2'>
+                  <p style={{lineHeight: 'normal'}} className="mb-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-600">Catalog Metadata</p>
+                  <button type="button" onClick={() => editingSection === 'catalogMetadata' ? cancelEdit() : startEdit('catalogMetadata', { programName: selectedCourse.programName, catalogue: selectedCourse.catalogue, subCatalog: selectedCourse.subCatalog, fiscalYear: selectedCourse.fiscalYear })} className={`cursor-pointer ${iconButtonClass}`}>
+                    <svg className="h-4 w-4" viewBox="0 0 20 20" fill="none">
+                      <path d="M4.75 15.25h2.1l7.7-7.7-2.1-2.1-7.7 7.7v2.1Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+                      <path d="m11.6 5.4 2.1 2.1" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+                    </svg>
+                  </button>
                 </div>
+                
+                {editingSection === 'catalogMetadata' ? (
+                  <div className="grid gap-4 md:grid-cols-4 mb-4">
+                    <TextInput
+                      label="Program Name"
+                      value={editData.catalogMetadata.programName || ''}
+                      onChange={(e) => handleEditChange('programName', e.target.value)}
+                      placeholder="Enter program name"
+                    />
+                    <TextInput
+                      label="Catalog"
+                      value={editData.catalogMetadata.catalogue || ''}
+                      onChange={(e) => handleEditChange('catalogue', e.target.value)}
+                      placeholder="Enter catalog"
+                    />
+                    <TextInput
+                      label="Sub-Catalog"
+                      value={editData.catalogMetadata.subCatalog || ''}
+                      onChange={(e) => handleEditChange('subCatalog', e.target.value)}
+                      placeholder="Enter sub-catalog"
+                    />
+                    <TextInput
+                      label="Fiscal Year"
+                      value={editData.catalogMetadata.fiscalYear || ''}
+                      onChange={(e) => handleEditChange('fiscalYear', e.target.value)}
+                      placeholder="Enter fiscal year"
+                    />
+                  </div>
+                ) : (
+                  <div className="grid gap-4 md:grid-cols-4">
+                    <DetailField label="Program Name" value={selectedCourse.programName} />
+                    <DetailField label="Catalog" value={selectedCourse.catalogue} />
+                    <DetailField label="Sub-Catalog" value={selectedCourse.subCatalog} />
+                    <DetailField label="Fiscal Year" value={selectedCourse.fiscalYear} />
+                  </div>
+                )}
+
+                {editingSection === 'catalogMetadata' && (
+                  <div className="flex gap-3 justify-end mt-4">
+                    <button type="button" onClick={cancelEdit} className="flex h-9 cursor-pointer items-center justify-center rounded-lg border border-slate-300 bg-white px-6 text-slate-700 font-semibold transition hover:bg-slate-50">Cancel</button>
+                    <button type="button" onClick={saveEdit} className="flex h-9 cursor-pointer items-center justify-center rounded-lg bg-violet-600 px-6 text-white font-semibold transition hover:bg-violet-700 shadow-sm">Save</button>
+                  </div>
+                )}
               </article>
 
 
@@ -400,7 +544,7 @@ const PublishedCourses = () => {
                 <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 mb-5 shadow-[0_18px_50px_-30px_rgba(15,23,42,0.35)]">
                   <div className='flex items-center justify-between gap-2'>
                   <p style={{lineHeight: 'normal'}} className="mb-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-600">Audience And Classification</p>
-                  <button type="button" className={`cursor-pointer ${iconButtonClass}`}>
+                  <button type="button" onClick={() => editingSection === 'audienceClassification' ? cancelEdit() : startEdit('audienceClassification', { segment: selectedCourse.segment?.join(', ') || '', mcemStage: selectedCourse.mcemStage?.join(', ') || '', solutionArea: selectedCourse.solutionArea?.join(', ') || '', industry: selectedCourse.industry?.join(', ') || '', profession: selectedCourse.profession?.join(', ') || '', discipline: selectedCourse.discipline?.join(', ') || '', skills: selectedCourse.skills?.join(', ') || '' })} className={`cursor-pointer ${iconButtonClass}`}>
                     <svg className="h-4 w-4" viewBox="0 0 20 20" fill="none">
                       <path d="M4.75 15.25h2.1l7.7-7.7-2.1-2.1-7.7 7.7v2.1Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
                       <path d="m11.6 5.4 2.1 2.1" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
@@ -408,51 +552,116 @@ const PublishedCourses = () => {
                   </button>
                 </div>
                   
-                  <div className="grid gap-4 md:grid-cols-4">
-                    <div className='col-span-2'>
-                      <p style={{lineHeight: 'normal'}} className="text-[10px] mb-1 font-semibold  tracking-[0.14em] text-slate-700">Segment</p>
-                      <p style={{lineHeight: 'normal'}} className="text-[12px] leading-6 text-slate-700">{listOrFallback(selectedCourse.segment)}</p>
-                    </div>
-                    <div className='col-span-2'>
-                      <p style={{lineHeight: 'normal'}} className="text-[10px] mb-1 font-semibold  tracking-[0.14em] text-slate-700">MCEM Stage</p>
-                      <p style={{lineHeight: 'normal'}} className="text-[12px] leading-6 text-slate-700">{listOrFallback(selectedCourse.mcemStage)}</p>
-                    </div>
-                  </div>
-                  <div className="mt-3 grid gap-4 md:grid-cols-4">
+                  {editingSection === 'audienceClassification' ? (
                     <div>
-                      <p style={{lineHeight: 'normal'}} className="text-[10px] mb-1 font-semibold  tracking-[0.14em] text-slate-700">Solution Area</p>
-                      <p style={{lineHeight: 'normal'}} className="text-[12px] leading-6 text-slate-700">{listOrFallback(selectedCourse.solutionArea)}</p>
-                    </div>
-                    
-                    <div>
-                      <p style={{lineHeight: 'normal'}} className="text-[10px] mb-1 font-semibold  tracking-[0.14em] text-slate-700">Industry</p>
-                      <p style={{lineHeight: 'normal'}} className="text-[12px] leading-6 text-slate-700">{listOrFallback(selectedCourse.industry)}</p>
-                    </div>
+                      <div className="grid gap-4 md:grid-cols-4">
+                        <div className='col-span-2'>
+                          <TextInput
+                            label="Segment"
+                            value={editData.audienceClassification.segment || ''}
+                            onChange={(e) => handleEditChange('segment', e.target.value)}
+                            placeholder="Enter segments (comma separated)"
+                          />
+                        </div>
+                        <div className='col-span-2'>
+                          <TextInput
+                            label="MCEM Stage"
+                            value={editData.audienceClassification.mcemStage || ''}
+                            onChange={(e) => handleEditChange('mcemStage', e.target.value)}
+                            placeholder="Enter MCEM stages (comma separated)"
+                          />
+                        </div>
+                      </div>
+                      <div className="mt-3 grid gap-4 md:grid-cols-4">
+                        <TextInput
+                          label="Solution Area"
+                          value={editData.audienceClassification.solutionArea || ''}
+                          onChange={(e) => handleEditChange('solutionArea', e.target.value)}
+                          placeholder="Enter solution area"
+                        />
+                        <TextInput
+                          label="Industry"
+                          value={editData.audienceClassification.industry || ''}
+                          onChange={(e) => handleEditChange('industry', e.target.value)}
+                          placeholder="Enter industry"
+                        />
+                        <TextInput
+                          label="Profession"
+                          value={editData.audienceClassification.profession || ''}
+                          onChange={(e) => handleEditChange('profession', e.target.value)}
+                          placeholder="Enter profession"
+                        />
+                        <TextInput
+                          label="Discipline"
+                          value={editData.audienceClassification.discipline || ''}
+                          onChange={(e) => handleEditChange('discipline', e.target.value)}
+                          placeholder="Enter discipline"
+                        />
+                      </div>
 
-                    <div>
-                      <p style={{lineHeight: 'normal'}} className="text-[10px] mb-1 font-semibold  tracking-[0.14em] text-slate-700">Profession</p>
-                      <p style={{lineHeight: 'normal'}} className="text-[12px] leading-6 text-slate-700">{listOrFallback(selectedCourse.profession)}</p>
-                    </div>
+                      <div className="mt-3">
+                        <TextInput
+                          label="Skills"
+                          value={editData.audienceClassification.skills || ''}
+                          onChange={(e) => handleEditChange('skills', e.target.value)}
+                          placeholder="Enter skills (comma separated)"
+                        />
+                      </div>
 
+                      <div className="flex gap-3 justify-end mt-4">
+                        <button type="button" onClick={cancelEdit} className="flex h-9 cursor-pointer items-center justify-center rounded-lg border border-slate-300 bg-white px-6 text-slate-700 font-semibold transition hover:bg-slate-50">Cancel</button>
+                        <button type="button" onClick={saveEdit} className="flex h-9 cursor-pointer items-center justify-center rounded-lg bg-violet-600 px-6 text-white font-semibold transition hover:bg-violet-700 shadow-sm">Save</button>
+                      </div>
+                    </div>
+                  ) : (
                     <div>
-                      <p style={{lineHeight: 'normal'}} className="text-[10px] mb-1 font-semibold  tracking-[0.14em] text-slate-700">Discipline</p>
-                      <p style={{lineHeight: 'normal'}} className="text-[12px] leading-6 text-slate-700">{listOrFallback(selectedCourse.discipline)}</p>
-                    </div>
-                  </div>
+                      <div className="grid gap-4 md:grid-cols-4">
+                        <div className='col-span-2'>
+                          <p style={{lineHeight: 'normal'}} className="text-[10px] mb-1 font-semibold  tracking-[0.14em] text-slate-700">Segment</p>
+                          <p style={{lineHeight: 'normal'}} className="text-[12px] leading-6 text-slate-700">{listOrFallback(selectedCourse.segment)}</p>
+                        </div>
+                        <div className='col-span-2'>
+                          <p style={{lineHeight: 'normal'}} className="text-[10px] mb-1 font-semibold  tracking-[0.14em] text-slate-700">MCEM Stage</p>
+                          <p style={{lineHeight: 'normal'}} className="text-[12px] leading-6 text-slate-700">{listOrFallback(selectedCourse.mcemStage)}</p>
+                        </div>
+                      </div>
+                      <div className="mt-3 grid gap-4 md:grid-cols-4">
+                        <div>
+                          <p style={{lineHeight: 'normal'}} className="text-[10px] mb-1 font-semibold  tracking-[0.14em] text-slate-700">Solution Area</p>
+                          <p style={{lineHeight: 'normal'}} className="text-[12px] leading-6 text-slate-700">{listOrFallback(selectedCourse.solutionArea)}</p>
+                        </div>
+                        
+                        <div>
+                          <p style={{lineHeight: 'normal'}} className="text-[10px] mb-1 font-semibold  tracking-[0.14em] text-slate-700">Industry</p>
+                          <p style={{lineHeight: 'normal'}} className="text-[12px] leading-6 text-slate-700">{listOrFallback(selectedCourse.industry)}</p>
+                        </div>
 
-                  <div className="mt-3">
-                    <div className="mt-3">
-                      <p style={{lineHeight: 'normal'}} className="text-[10px] mb-1 font-semibold  tracking-[0.14em] text-slate-700">Skills</p>
-                      <p style={{lineHeight: 'normal'}} className="text-[12px] leading-6 text-slate-700">{listOrFallback(selectedCourse.skills)}</p>
+                        <div>
+                          <p style={{lineHeight: 'normal'}} className="text-[10px] mb-1 font-semibold  tracking-[0.14em] text-slate-700">Profession</p>
+                          <p style={{lineHeight: 'normal'}} className="text-[12px] leading-6 text-slate-700">{listOrFallback(selectedCourse.profession)}</p>
+                        </div>
+
+                        <div>
+                          <p style={{lineHeight: 'normal'}} className="text-[10px] mb-1 font-semibold  tracking-[0.14em] text-slate-700">Discipline</p>
+                          <p style={{lineHeight: 'normal'}} className="text-[12px] leading-6 text-slate-700">{listOrFallback(selectedCourse.discipline)}</p>
+                        </div>
+                      </div>
+
+                      <div className="mt-3">
+                        <div className="mt-3">
+                          <p style={{lineHeight: 'normal'}} className="text-[10px] mb-1 font-semibold  tracking-[0.14em] text-slate-700">Skills</p>
+                          <p style={{lineHeight: 'normal'}} className="text-[12px] leading-6 text-slate-700">{listOrFallback(selectedCourse.skills)}</p>
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               </article>
 
               <article className="rounded-xl border border-slate-200 bg-white px-4 py-3 mb-5 shadow-[0_18px_50px_-30px_rgba(15,23,42,0.35)]">
                 <div className='flex items-center justify-between gap-2'>
                   <p style={{lineHeight: 'normal'}} className="mb-3 text-[10px] font-semibold uppercase tracking-[0.14em]  text-slate-600">Publishing Details</p>
-                  <button type="button" className={`cursor-pointer ${iconButtonClass}`}>
+                  <button type="button" onClick={() => editingSection === 'publishingDetails' ? cancelEdit() : startEdit('publishingDetails', { displayInCatalogs: selectedCourse.displayInCatalogs, displayInReporting: selectedCourse.displayInReporting, comments: selectedCourse.comments })} className={`cursor-pointer ${iconButtonClass}`}>
                     <svg className="h-4 w-4" viewBox="0 0 20 20" fill="none">
                       <path d="M4.75 15.25h2.1l7.7-7.7-2.1-2.1-7.7 7.7v2.1Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
                       <path d="m11.6 5.4 2.1 2.1" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
@@ -460,15 +669,51 @@ const PublishedCourses = () => {
                   </button>
                 </div>
                 
-                <div className="grid gap-4 md:grid-cols-2">
-                  <DetailField label="Display in Catalogs" value={selectedCourse.displayInCatalogs} />
-                  <DetailField label="Display in Reporting" value={selectedCourse.displayInReporting} />
-                </div>
+                {editingSection === 'publishingDetails' ? (
+                  <div>
+                    <div className="grid gap-4 md:grid-cols-2 mb-3">
+                      <TextInput
+                        label="Display in Catalogs"
+                        value={editData.publishingDetails.displayInCatalogs || ''}
+                        onChange={(e) => handleEditChange('displayInCatalogs', e.target.value)}
+                        placeholder="Enter value"
+                      />
+                      <TextInput
+                        label="Display in Reporting"
+                        value={editData.publishingDetails.displayInReporting || ''}
+                        onChange={(e) => handleEditChange('displayInReporting', e.target.value)}
+                        placeholder="Enter value"
+                      />
+                    </div>
 
-                <div className="mt-3">
-                  <p style={{lineHeight: 'normal'}} className="text-[10px] mb-1 font-semibold  tracking-[0.14em] text-slate-700">Comments</p>
-                  <p style={{lineHeight: 'normal'}} className="text-[12px] leading-6 text-slate-700">{valueOrFallback(selectedCourse.comments)}</p>
-                </div>
+                    <div className="mt-3">
+                      <TextAreaInput
+                        label="Comments"
+                        value={editData.publishingDetails.comments || ''}
+                        onChange={(e) => handleEditChange('comments', e.target.value)}
+                        placeholder="Enter comments"
+                        rows={3}
+                      />
+                    </div>
+
+                    <div className="flex gap-3 justify-end mt-4">
+                      <button type="button" onClick={cancelEdit} className="flex h-9 cursor-pointer items-center justify-center rounded-lg border border-slate-300 bg-white px-6 text-slate-700 font-semibold transition hover:bg-slate-50">Cancel</button>
+                      <button type="button" onClick={saveEdit} className="flex h-9 cursor-pointer items-center justify-center rounded-lg bg-violet-600 px-6 text-white font-semibold transition hover:bg-violet-700 shadow-sm">Save</button>
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <DetailField label="Display in Catalogs" value={selectedCourse.displayInCatalogs} />
+                      <DetailField label="Display in Reporting" value={selectedCourse.displayInReporting} />
+                    </div>
+
+                    <div className="mt-3">
+                      <p style={{lineHeight: 'normal'}} className="text-[10px] mb-1 font-semibold  tracking-[0.14em] text-slate-700">Comments</p>
+                      <p style={{lineHeight: 'normal'}} className="text-[12px] leading-6 text-slate-700">{valueOrFallback(selectedCourse.comments)}</p>
+                    </div>
+                  </div>
+                )}
               </article>
               </>
             ) : (
